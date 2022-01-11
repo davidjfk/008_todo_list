@@ -50,23 +50,15 @@ const addTaskToDOM = async function (arrObjTask) {
     }
 
     const toggleTaskBetweenDoneAndNotDone = async (e) => {
-               
-        if (e.target.checked === true) {
-            e.target.checked = false;
-            // toggleTaskBetweenDoneAndNotDone(event);
-            document.getElementById(task.id).style.textDecoration = "none";
-        } else {
-            e.target.checked = true;
-            // toggleTaskBetweenDoneAndNotDone(event);
-            document.getElementById(task.id).style.textDecoration = "line-through";
-        }
-  
-        if (checkboxTaskDone.checked) {
-            document.getElementById(task.id).style.textDecoration = "line-through";
-        } else {
-            document.getElementById(task.id).style.textDecoration = "none";
-        }
 
+        if (e.target.checked) {
+            checkboxTaskDone.checked = true;
+            document.getElementById(task.id).style.textDecoration = "line-through";
+
+        } else {
+            checkboxTaskDone.checked = false;
+            document.getElementById(task.id).style.textDecoration = "none";
+        }   
 
         const todolistItemId = (`${e.target.parentNode.className}`)
         const endpoint = `${BASE_URL}${todolistItemId}`
@@ -93,7 +85,7 @@ const addTaskToDOM = async function (arrObjTask) {
 
         const todolistItemAsObjectToUpdate = transformUpdatedTaskStringIntoObj()
         const responseObj = await updateTask(endpoint, todolistItemAsObjectToUpdate);
-        log(`Updated task (by checking or unchecking checkbox), as responsObj from local-api:  ${responseObj.description} | ${responseObj._id} | ${responseObj._updatedOn} | done: ${responseObj.done} `);
+        log(`Updated task (by checking or unchecking checkbox), as responsObj from local-api:  ${responseObj.description} | ${responseObj._id} | ${responseObj._updatedOn} | done: ${e.target.checked} `);
         const parent = document.getElementById('todo-list');
         const childToDelete2 = document.getElementById(`${responseObj._id}`);
         deleteOneChildNode(parent, childToDelete2 )            
@@ -109,6 +101,8 @@ const addTaskToDOM = async function (arrObjTask) {
         if (regExpToSelectCheckboxTaskDone.test(e.target.id)) {
             switch (e.key) {
                 case ('Enter'):
+                    e.target.checked = !e.target.checked;
+                    // This inversion is needed to give the keyboard event 'Enter' on the checkbox the same behavior as a mouse click event on a checkbox. 
                     toggleTaskBetweenDoneAndNotDone(e);
             }
         }

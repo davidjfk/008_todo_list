@@ -1,5 +1,32 @@
+
+const showTasksWhenOpeningTodolistApp = async function () {
+
+    const receivedArrWithToDoListItemsFromLocalApi = await getAllTasksFromLocalApi(BASE_URL);
+        
+    const checkCorrectnessOfTodolistItemsFromLocalApi = (array) => {
+        const arrLength = receivedArrWithToDoListItemsFromLocalApi.length;
+        for (let i = 0; i < arrLength; i++) {
+            if (![true, false].includes(array[i].done) || array[i]._id === "") {
+                console.error(`Todolist item(s) have  not been added to  local-api correctly.  Reproduce error: 1. enter task and click 'add'. 2. repeat step 1. `)
+            }
+        }
+    }
+    checkCorrectnessOfTodolistItemsFromLocalApi(receivedArrWithToDoListItemsFromLocalApi);
+
+    if (receivedArrWithToDoListItemsFromLocalApi) {
+        const todoList = document.querySelector('#todo-list');
+        deleteAllChildNodes(todoList);
+    }
+    receivedArrWithToDoListItemsFromLocalApi.map((arrObjTask) => addTaskToDOM(arrObjTask));
+
+}
+showTasksWhenOpeningTodolistApp()
+
+
+
 const getNewTask = () => {
     const newTask = document.getElementById("new-task").value;
+    document.getElementById("new-task").value = "";
     return newTask;
 }
 const buttonAddTask = document.querySelector(".add-task");
@@ -13,7 +40,7 @@ const transformTaskIntoObj = () => {
         addTaskMainFn(newTaskAsObj)
     }     
 }
-buttonAddTask.addEventListener("click", transformTaskIntoObj)
+buttonAddTask.addEventListener("click", transformTaskIntoObj) 
 
 const deleteAllTasksFromDOM = async () => {
     // the API dictates that tasks must be deleted one-by-one.
@@ -31,7 +58,8 @@ const deleteAllTasksFromDOM = async () => {
                 const responseObj = await deleteTask(endpoint);
                 log(`responsObj.status from local-api about last deleted task: ${responseObj.status}`)
                 if (responseObj.status !== 204) {
-                    console.error(`There is a problem deleting all tasks in one batch. Reproduce error: 1. add 5 tasks to todo-list. 2) click button Delete All Tasks`)
+                    console.error(`There is a problem deleting all tasks in one batch. Reproduce error: 
+                    1. add 5 tasks to todo-list. 2) click button Delete All Tasks`)
                 }
                 log(`number of tasks (left) to delete: ${arrLength - i -1}`)
             } catch (e) {

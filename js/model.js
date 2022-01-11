@@ -1,6 +1,6 @@
 const BASE_URL = `http://localhost:3000/`;
 
-const deleteTask = async (endpoint) => {
+const deleteTask = async endpoint => {
     try {
         const resultObj = await fetch(endpoint, {
             method: "DELETE",
@@ -13,9 +13,9 @@ const deleteTask = async (endpoint) => {
     } catch (e) {
         log(e);    
     }
-  };
+  }; 
 
-const getAllTasksFromLocalApi = async (endpoint) => {
+const getAllTasksFromLocalApi = async endpoint => {
   try {
       const result = await fetch(endpoint, {
           method: "GET",
