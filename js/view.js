@@ -2,6 +2,7 @@ const getDescriptionOfToDoListTask =  function (arrObjTask) {
     return arrObjTask.description;
 }
 
+
 const addTaskToDOM = async function (arrObjTask) {
     /* 
     when new task is entered in input field, then during fast-upate of UI, the arrObjTask_id is yet unknown. The DOM will display '<span class='undefined'></span>
@@ -49,8 +50,8 @@ const addTaskToDOM = async function (arrObjTask) {
         document.getElementById(task.id).style.textDecoration = "none";
     }
 
-    const toggleTaskBetweenDoneAndNotDone = async (e) => {
 
+    const toggleTaskBetweenDoneAndNotDone = async (e) => {
         if (e.target.checked) {
             checkboxTaskDone.checked = true;
             document.getElementById(task.id).style.textDecoration = "line-through";
@@ -95,6 +96,7 @@ const addTaskToDOM = async function (arrObjTask) {
         addTaskToDOM(arrObjTask)
     }
     checkboxTaskDone.addEventListener("click", toggleTaskBetweenDoneAndNotDone);
+    
     
     checkboxTaskDone.addEventListener("keydown", (e) => {
         const regExpToSelectCheckboxTaskDone = new RegExp(/^task-done/);
